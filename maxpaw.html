@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Таймер</title>
+</head>
+<body>
+    <h3>Отсчёт до конца лета</h3>
+    <h3 id="year">Годы:</h3>
+    <h3 id="month">Месяцы:</h3>
+    <h3 id="week">Недели:</h3>
+    <h3 id="day">Дни:</h3>
+    <h3 id="hour">Часы:</h3>
+    <h3 id="minute">Минуты:</h3>
+    <h3 id="second">Секунды:</h3>
+    <script>
+        function calculateTimeDifference() {
+  const realTime = Date.now() / 1000;
+
+  const needTime = new Date("2023-09-01T00:00:00").getTime() / 1000;
+
+  let differenceTime = {};
+  differenceTime.second = Math.round((needTime - realTime) * 1000) / 1000;
+  differenceTime.minute = Math.round(differenceTime.second / 60 * 1000) / 1000;
+  differenceTime.hour = Math.round(differenceTime.minute / 60 * 1000) / 1000;
+  differenceTime.day = Math.round(differenceTime.hour / 24 * 1000) / 1000;
+  differenceTime.week = Math.round(differenceTime.day / 7 * 1000) / 1000;
+  differenceTime.month = Math.round(differenceTime.day / (365 / 12) * 1000) / 1000;
+  differenceTime.year = Math.round(differenceTime.day / 365 * 1000) / 1000;
+
+  const year = document.getElementById("year");
+  year.innerHTML = "Годы: " + differenceTime.year;
+
+  const month = document.getElementById("month");
+  month.innerHTML = "Месяца: " + differenceTime.month;
+
+  const week = document.getElementById("week");
+  week.innerHTML = "Недели: " + differenceTime.week;
+
+  const day = document.getElementById("day");
+  day.innerHTML = "Дни: " + differenceTime.day;
+
+  const hour = document.getElementById("hour");
+  hour.innerHTML = "Часы: " + differenceTime.hour;
+
+  const minute = document.getElementById("minute");
+  minute.innerHTML = "Минуты: " + differenceTime.minute;
+
+  const second = document.getElementById("second");
+  second.innerHTML = "Секунды: " + differenceTime.second;
+}
+
+setInterval(calculateTimeDifference, 1000);
+    </script>
+</body>
+</html>
