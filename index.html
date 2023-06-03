@@ -5,7 +5,7 @@
     <title>Таймер</title>
 </head>
 <body>
-    <h3>Отсчёт до конца лета</h3>
+    <h1>Отсчёт до конца лета</h1>
     <h3 id="year">Годы:</h3>
     <h3 id="month">Месяцы:</h3>
     <h3 id="week">Недели:</h3>
@@ -13,7 +13,18 @@
     <h3 id="hour">Часы:</h3>
     <h3 id="minute">Минуты:</h3>
     <h3 id="second">Секунды:</h3>
+    <hr>
+    <p>*При подсчёте месяцев и годов они равняются 30 и 365 дней соотвественно, из-за этого могут быть небольшие ошибки</p>
     <script>
+
+    const realTime = Date.now() / 1000;
+
+    const needTime = new Date("2023-09-01T00:00:00").getTime() / 1000;
+
+    if (realTime >= needTime)
+        { while (realTime >= needTime)
+            { needTime += 31536000; }}
+
         function calculateTimeDifference() {
   const realTime = Date.now() / 1000;
 
@@ -29,10 +40,10 @@
   differenceTime.year = Math.round(differenceTime.day / 365 * 1000) / 1000;
 
   const year = document.getElementById("year");
-  year.innerHTML = "Годы: " + differenceTime.year;
+  year.innerHTML = "Годы: " + differenceTime.year + "*";
 
   const month = document.getElementById("month");
-  month.innerHTML = "Месяца: " + differenceTime.month;
+  month.innerHTML = "Месяца: " + differenceTime.month + "*";
 
   const week = document.getElementById("week");
   week.innerHTML = "Недели: " + differenceTime.week;
