@@ -16,19 +16,27 @@
     <hr>
     <p>*При подсчёте месяцев и годов они равняются 30 и 365 дней соотвественно, из-за этого могут быть небольшие ошибки</p>
     <script>
-
-    const realTime = Date.now() / 1000;
-
-    const needTime = new Date("2023-09-01T00:00:00").getTime() / 1000;
-
-    if (realTime >= needTime)
-        { while (realTime >= needTime)
-            { needTime += 31536000; }}
-
-        function calculateTimeDifference() {
+function getNextYearTime() {
+  let needTime = new Date("2023-09-01T00:00:00").getTime() / 1000;
   const realTime = Date.now() / 1000;
 
-  const needTime = new Date("2023-09-01T00:00:00").getTime() / 1000;
+  if (realTime >= needTime) {
+    let year = new Date().getFullYear();
+    needTime = new Date(`Sep 01 ${year} 00:00:00`).getTime() / 1000;
+
+    // Увеличиваем год, пока текущее время больше или равно нужному времени
+    while (realTime >= needTime) {
+      year++;
+      needTime = new Date(`Sep 01 ${year} 00:00:00`).getTime() / 1000;
+    }
+  }
+
+  return needTime;
+}
+
+function calculateTimeDifference() {
+  let needTime = getNextYearTime();
+  const realTime = Date.now() / 1000;
 
   let differenceTime = {};
   differenceTime.second = Math.round((needTime - realTime) * 1000) / 1000;
