@@ -5,7 +5,7 @@
     <title>Таймер</title>
 </head>
 <body>
-    <h1>Отсчёт до конца лета</h1>
+    <h1 id="countdown">Отсчёт до</h1>
     <h3 id="year">Годы:</h3>
     <h3 id="month">Месяцы:</h3>
     <h3 id="week">Недели:</h3>
@@ -16,27 +16,20 @@
     <hr>
     <p>*При подсчёте месяцев и годов они равняются 30 и 365 дней соотвественно, из-за этого могут быть небольшие ошибки</p>
     <script>
-function getNextYearTime() {
-  let needTime = new Date("2023-09-01T00:00:00").getTime() / 1000;
-  const realTime = Date.now() / 1000;
-
-  if (realTime >= needTime) {
-    let year = new Date().getFullYear();
-    needTime = new Date(`Sep 01 ${year} 00:00:00`).getTime() / 1000;
-
-    // Увеличиваем год, пока текущее время больше или равно нужному времени
-    while (realTime >= needTime) {
-      year++;
-      needTime = new Date(`Sep 01 ${year} 00:00:00`).getTime() / 1000;
-    }
-  }
-
-  return needTime;
-}
-
 function calculateTimeDifference() {
-  let needTime = getNextYearTime();
-  const realTime = Date.now() / 1000;
+  let realTime = Date.now() / 1000;
+
+  let needTime = new Date(`00:00:00 09-01-${new Date().getFullYear()}`);
+  needTime = needTime.getTime() / 1000;
+  if (realTime >= needTime) {
+    needTime = new Date(`00:00:00 06-01-${new Date().getFullYear() + 1}`);
+    needTime = needTime.getTime() / 1000;
+    const countdown = document.getElementById("countdown");
+    countdown.innerHTML = "Отсчёт до начала лета";
+  } else {
+    const countdown = document.getElementById("countdown");
+    countdown.innerHTML = "Отсчёт до конца лета";
+  }
 
   let differenceTime = {};
   differenceTime.second = Math.round((needTime - realTime) * 1000) / 1000;
@@ -44,7 +37,7 @@ function calculateTimeDifference() {
   differenceTime.hour = Math.round(differenceTime.minute / 60 * 1000) / 1000;
   differenceTime.day = Math.round(differenceTime.hour / 24 * 1000) / 1000;
   differenceTime.week = Math.round(differenceTime.day / 7 * 1000) / 1000;
-  differenceTime.month = Math.round(differenceTime.day / (365 / 12) * 1000) / 1000;
+  differenceTime.month = Math.round(differenceTime.day / 30 * 1000) / 1000;
   differenceTime.year = Math.round(differenceTime.day / 365 * 1000) / 1000;
 
   const year = document.getElementById("year");
