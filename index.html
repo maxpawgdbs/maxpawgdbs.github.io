@@ -3,8 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Таймер</title>
+    <style>
+        .gradient{
+            background-image: linear-gradient(to bottom right, #ee82ee, #ff0000);
+            width: 400px;
+            height: 570px;
+
+        }
+        .time{
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.80);
+            width: 200px;
+            height: 370px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
+<div class="gradient">
+    <div class="time">
     <h1 id="countdown">Отсчёт до</h1>
     <h3 id="year">Годы:</h3>
     <h3 id="month">Месяцы:</h3>
@@ -13,9 +30,11 @@
     <h3 id="hour">Часы:</h3>
     <h3 id="minute">Минуты:</h3>
     <h3 id="second">Секунды:</h3>
-    <hr>
+    </div></div>
+    <hr style="color: black">
     <p>*При подсчёте месяцев и годов они равняются 30 и 365 дней соотвественно, из-за этого могут быть небольшие ошибки</p>
     <script>
+
 function calculateTimeDifference() {
   let realTime = Date.now() / 1000;
 
