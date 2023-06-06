@@ -21,6 +21,30 @@
   font-size: 24px;
   padding: 10px;
 }
+.grid-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  width: 190px;
+  height: 120px;
+  margin: 100px;
+}
+
+.grid-button {
+  background-color: #ddd;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 24px;
+  padding: 10px;
+}
+.button-transparent {
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  opacity: 0.5;
+  transition: opacity 0.2s ease-in-out;
+}
     </style>
 </head>
 <body>
@@ -43,7 +67,14 @@
   <div id="id15" class="grid-item"></div>
   <div id="id16" class="grid-item"></div>
 </div>
-    <h4>Управление стрелками. Нажатие обрабатывается каждые 0,3 секунды</h4>
+<div class="grid-buttons">
+    <button class="grid-button button-transparent"></button>
+    <button id="up" class="grid-button">&#8593;</button>
+    <button class="grid-button button-transparent"></button>
+    <button id="left" class="grid-button">&#8592;</button>
+    <button id="down" class="grid-button">&#8595;</button>
+    <button id="right" class="grid-button">&#8594;</button>
+</div>
 <script>
     function new_square() {
   let square = {};
@@ -292,39 +323,39 @@ for (let i = 1; i < 17; i++) {
         if (square[i] != 0){
         id.innerHTML = square[i];} else {id.innerHTML = ' '}
       }
-let lastKeypressTime = Date.now();
+var leftButton = document.getElementById("left");
+  leftButton.addEventListener("click", function() {
+    handleButtonClick('left');
+  });
 
-function handleKeyPress(event) {
-  const currentTime = Date.now();
-  if ((currentTime - lastKeypressTime) > 300) {
-    console.log(event.key);
-    lastKeypressTime = currentTime;
+  var rightButton = document.getElementById("right");
+  rightButton.addEventListener("click", function() {
+    handleButtonClick('right');
+  });
 
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-      let direction = '';
-      if (event.key === 'ArrowLeft') {
-        direction = 'left';
-      } else if (event.key === 'ArrowRight') {
-        direction = 'right';
-      } else if (event.key === 'ArrowUp') {
-        direction = 'up';
-      } else if (event.key === 'ArrowDown') {
-        direction = 'down';
-      }
-      game(direction);
-      square = gen_num(square);
-      for (let i = 1; i < 17; i++) {
-        const id = document.getElementById("id" + i);
-        if (square[i] != 0){
-        id.innerHTML = square[i];} else {id.innerHTML = ' '}
+  var upButton = document.getElementById("up");
+  upButton.addEventListener("click", function() {
+    handleButtonClick('up');
+  });
+
+  var downButton = document.getElementById("down");
+  downButton.addEventListener("click", function() {
+    handleButtonClick('down');
+  });
+
+  function handleButtonClick(direction) {
+    console.log(direction);
+    game(direction);
+    square = gen_num(square);
+    for (let i = 1; i < 17; i++) {
+      const id = document.getElementById("id" + i);
+      if (square[i] != 0){
+        id.innerHTML = square[i];
+      } else {
+        id.innerHTML = ' ';
       }
     }
   }
-}
-
-setInterval(() => {
-  document.addEventListener('keydown', handleKeyPress);
-}, 300);
 
 
 </script>
