@@ -2,101 +2,331 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Таймер</title>
+    <title>2048</title>
     <style>
-        .gradient{
-            background-image: linear-gradient(to bottom right, #ee82ee, #ff0000);
-            height: 100vh;
-            padding-top: 1%
-
-
-        }
-        .time{
-            background: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.80);
-            width: 50%;
-            height: 70%;
-            margin-left: 25%;
-            margin-right: 25%;
-            padding: 15px;
-            font-size: 180%;
-            border-radius: 30px;
-        }
-        .disclaimer{
-            background: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.80);
-            width: 50%;
-            height: 5%;
-            margin-left: 25%;
-            margin-right: 25%;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 30px;
-        }
-    </style>
-</head>
-<body class="gradient">
-
-    <div class="time">
-    <h1 id="countdown">Отсчёт до</h1>
-    <h3 id="year">Годы:</h3>
-    <h3 id="month">Месяцы:</h3>
-    <h3 id="week">Недели:</h3>
-    <h3 id="day">Дни:</h3>
-    <h3 id="hour">Часы:</h3>
-    <h3 id="minute">Минуты:</h3>
-    <h3 id="second">Секунды:</h3>
-    </div>
-    <div class="disclaimer"><p>*При подсчёте месяцев и годов они равняются 30 и 365 дней соотвественно, из-за этого могут быть небольшие ошибки</p></div>
-    <script>
-
-function calculateTimeDifference() {
-  let realTime = Date.now() / 1000;
-
-  let needTime = new Date(`00:00:00 09-01-${new Date().getFullYear()}`);
-  needTime = needTime.getTime() / 1000;
-  if (realTime >= needTime) {
-    needTime = new Date(`00:00:00 06-01-${new Date().getFullYear() + 1}`);
-    needTime = needTime.getTime() / 1000;
-    const countdown = document.getElementById("countdown");
-    countdown.innerHTML = "Отсчёт до начала лета";
-  } else {
-    const countdown = document.getElementById("countdown");
-    countdown.innerHTML = "Отсчёт до конца лета";
-  }
-
-  let differenceTime = {};
-  differenceTime.second = Math.round((needTime - realTime) * 1000) / 1000;
-  differenceTime.minute = Math.round(differenceTime.second / 60 * 1000) / 1000;
-  differenceTime.hour = Math.round(differenceTime.minute / 60 * 1000) / 1000;
-  differenceTime.day = Math.round(differenceTime.hour / 24 * 1000) / 1000;
-  differenceTime.week = Math.round(differenceTime.day / 7 * 1000) / 1000;
-  differenceTime.month = Math.round(differenceTime.day / 30 * 1000) / 1000;
-  differenceTime.year = Math.round(differenceTime.day / 365 * 1000) / 1000;
-
-  const year = document.getElementById("year");
-  year.innerHTML = "Годы: " + differenceTime.year + "*";
-
-  const month = document.getElementById("month");
-  month.innerHTML = "Месяца: " + differenceTime.month + "*";
-
-  const week = document.getElementById("week");
-  week.innerHTML = "Недели: " + differenceTime.week;
-
-  const day = document.getElementById("day");
-  day.innerHTML = "Дни: " + differenceTime.day;
-
-  const hour = document.getElementById("hour");
-  hour.innerHTML = "Часы: " + differenceTime.hour;
-
-  const minute = document.getElementById("minute");
-  minute.innerHTML = "Минуты: " + differenceTime.minute;
-
-  const second = document.getElementById("second");
-  second.innerHTML = "Секунды: " + differenceTime.second;
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  width: 240px; /* (4 * 50) + (3 * 10) = 240 */
+  height: 240px; /* (4 * 50) + (3 * 10) = 240 */
+  margin: 100px;
 }
 
-setInterval(calculateTimeDifference, 1000);
-    </script>
+.grid-item {
+  background-color: #ddd;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size: 24px;
+  padding: 10px;
+}
+    </style>
+</head>
+<body>
+<h1>Игра 2048</h1>
+    <div class="grid-container">
+  <div id="id1" class="grid-item"></div>
+  <div id="id2" class="grid-item"></div>
+  <div id="id3" class="grid-item"></div>
+  <div id="id4" class="grid-item"></div>
+  <div id="id5" class="grid-item"></div>
+  <div id="id6" class="grid-item"></div>
+  <div id="id7" class="grid-item"></div>
+  <div id="id8" class="grid-item"></div>
+  <div id="id9" class="grid-item"></div>
+  <div id="id10" class="grid-item"></div>
+  <div id="id11" class="grid-item"></div>
+  <div id="id12" class="grid-item"></div>
+  <div id="id13" class="grid-item"></div>
+  <div id="id14" class="grid-item"></div>
+  <div id="id15" class="grid-item"></div>
+  <div id="id16" class="grid-item"></div>
+</div>
+    <h4>Управление стрелками. Нажатие обрабатывается каждые 0,3 секунды</h4>
+<script>
+    function new_square() {
+  let square = {};
+  for (let i = 1; i <= 16; i++) {
+    square[i] = 0;
+  }
+  return square;
+}
+
+function gen_num(square) {
+  let n = Math.floor(Math.random() * 16) + 1;
+  while (square[n] !== 0) {
+    n = Math.floor(Math.random() * 16) + 1;
+  }
+  square[n] = Math.random() < 0.9 ? 2 : 4;
+  return square;
+}
+function game(button) {
+  if (button == 'up') {
+    for (let i = 5; i <= 8; i++) {
+      if (square[i] != 0) {
+        if (square[i - 4] == 0) {
+          square[i - 4] = square[i];
+          square[i] = 0;
+        } else if (square[i - 4] == square[i]) {
+          square[i - 4] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+    for (let i = 9; i <= 12; i++) {
+      if (square[i] != 0) {
+        if (square[i - 4] == 0) {
+          square[i - 4] = square[i];
+          square[i] = 0;
+          if (square[i - 8] == 0) {
+            square[i - 8] = square[i - 4];
+            square[i - 4] = 0;
+          } else if (square[i - 8] == square[i - 4]) {
+            square[i - 8] = square[i - 4] * 2;
+            square[i - 4] = 0;
+          }
+        } else if (square[i - 4] == square[i]) {
+          square[i - 4] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+    for (let i = 13; i <= 16; i++) {
+      if (square[i] != 0) {
+        if (square[i - 4] == 0) {
+          square[i - 4] = square[i];
+          square[i] = 0;
+          if (square[i - 8] == 0) {
+            square[i - 8] = square[i - 4];
+            square[i - 4] = 0;
+            if (square[i - 12] == 0) {
+              square[i - 12] = square[i - 8];
+              square[i - 8] = 0;
+            } else if (square[i - 12] == square[i - 8]) {
+              square[i - 12] = square[i - 8] * 2;
+              square[i - 8] = 0;
+            }
+          } else if (square[i - 8] == square[i - 4]) {
+            square[i - 8] = square[i - 4] * 2;
+            square[i - 4] = 0;
+          }
+        } else if (square[i - 4] == square[i]) {
+          square[i - 4] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+  } if (button == 'left') {
+    for (let i = 2; i <= 14; i += 4) {
+      if (square[i] != 0) {
+        if (square[i - 1] == 0) {
+          square[i - 1] = square[i];
+          square[i] = 0;
+        } else if (square[i - 1] == square[i]) {
+          square[i - 1] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+    for (let i = 3; i <= 15; i += 4) {
+      if (square[i] != 0) {
+        if (square[i - 1] == 0) {
+          square[i - 1] = square[i];
+          square[i] = 0;
+          if (square[i - 2] == 0) {
+            square[i - 2] = square[i - 1];
+            square[i - 1] = 0;
+          } else if (square[i - 2] == square[i - 1]) {
+            square[i - 2] = square[i - 1] * 2;
+            square[i - 1] = 0;
+          }
+        } else if (square[i - 1] == square[i]) {
+          square[i - 1] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+    for (let i = 4; i <= 16; i += 4) {
+      if (square[i] != 0) {
+        if (square[i - 1] == 0) {
+          square[i - 1] = square[i];
+          square[i] = 0;
+          if (square[i - 2] == 0) {
+            square[i - 2] = square[i - 1];
+            square[i - 1] = 0;
+            if (square[i - 3] == 0) {
+              square[i - 3] = square[i - 2];
+              square[i - 2] = 0;
+            } else if (square[i - 3] == square[i - 2]) {
+              square[i - 3] = square[i - 2] * 2;
+              square[i - 2] = 0;
+            }
+          } else if (square[i - 2] == square[i - 1]) {
+            square[i - 2] = square[i - 1] * 2;
+            square[i - 1] = 0;
+          }
+        } else if (square[i - 1] == square[i]) {
+          square[i - 1] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+  } if (button == 'down') {
+    for (let i = 9; i <= 12; i++) {
+      if (square[i] != 0) {
+        if (square[i + 4] == 0) {
+          square[i + 4] = square[i];
+          square[i] = 0;
+        } else if (square[i + 4] == square[i]) {
+          square[i + 4] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+    for (let i = 5; i <= 8; i++) {
+      if (square[i] != 0) {
+        if (square[i + 4] == 0) {
+          square[i + 4] = square[i];
+          square[i] = 0;
+          if (square[i + 8] == 0) {
+            square[i + 8] = square[i + 4];
+            square[i + 4] = 0;
+          } else if (square[i + 8] == square[i + 4]) {
+            square[i + 8] = square[i + 4] * 2;
+            square[i + 4] = 0;
+          }
+        } else if (square[i + 4] == square[i]) {
+          square[i + 4] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+    for (let i = 1; i <= 4; i++) {
+      if (square[i] != 0) {
+        if (square[i + 4] == 0) {
+          square[i + 4] = square[i];
+          square[i] = 0;
+          if (square[i + 8] == 0) {
+            square[i + 8] = square[i + 4];
+            square[i + 4] = 0;
+            if (square[i + 12] == 0) {
+              square[i + 12] = square[i + 8];
+              square[i + 8] = 0;
+            } else if (square[i + 12] == square[i + 8]) {
+              square[i + 12] = square[i + 8] * 2;
+              square[i + 8] = 0;
+            }
+          } else if (square[i + 8] == square[i + 4]) {
+            square[i + 8] = square[i + 4] * 2;
+            square[i + 4] = 0;
+          }
+        } else if (square[i + 4] == square[i]) {
+          square[i + 4] = square[i] * 2;
+          square[i] = 0;
+        }
+      }
+    }
+  } else if (button == 'right') {
+  for (let i = 3; i <= 15; i += 4) {
+    if (square[i] != 0) {
+      if (square[i + 1] == 0) {
+        square[i + 1] = square[i];
+        square[i] = 0;
+      } else if (square[i + 1] == square[i]) {
+        square[i + 1] = square[i] * 2;
+        square[i] = 0;
+      }
+    }
+  }
+  for (let i = 2; i <= 14; i += 4) {
+    if (square[i] != 0) {
+      if (square[i + 1] == 0) {
+        square[i + 1] = square[i];
+        square[i] = 0;
+        if (square[i + 2] == 0) {
+          square[i + 2] = square[i + 1];
+          square[i + 1] = 0;
+        } else if (square[i + 2] == square[i + 1]) {
+          square[i + 2] = square[i + 1] * 2;
+          square[i + 1] = 0;
+        }
+      } else if (square[i + 1] == square[i]) {
+        square[i + 1] = square[i] * 2;
+        square[i] = 0;
+      }
+    }
+  }
+  for (let i = 1; i <= 13; i += 4) {
+    if (square[i] != 0) {
+      if (square[i + 1] == 0) {
+        square[i + 1] = square[i];
+        square[i] = 0;
+        if (square[i + 2] == 0) {
+          square[i + 2] = square[i + 1];
+          square[i + 1] = 0;
+          if (square[i + 3] == 0) {
+            square[i + 3] = square[i + 2];
+            square[i + 2] = 0;
+          } else if (square[i + 3] == square[i + 2]) {
+            square[i + 3] = square[i + 2] * 2;
+            square[i + 2] = 0;
+          }
+        } else if (square[i + 2] == square[i + 1]) {
+          square[i + 2] = square[i + 1] * 2;
+          square[i + 1] = 0;
+        }
+      } else if (square[i + 1] == square[i]) {
+        square[i + 1] = square[i] * 2;
+        square[i] = 0;
+      }
+    }
+  }
+}
+}
+let square = new_square();
+square = gen_num(square);
+square = gen_num(square);
+for (let i = 1; i < 17; i++) {
+        const id = document.getElementById("id" + i);
+        if (square[i] != 0){
+        id.innerHTML = square[i];} else {id.innerHTML = ' '}
+      }
+let lastKeypressTime = Date.now();
+
+function handleKeyPress(event) {
+  const currentTime = Date.now();
+  if ((currentTime - lastKeypressTime) > 300) {
+    console.log(event.key);
+    lastKeypressTime = currentTime;
+
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      let direction = '';
+      if (event.key === 'ArrowLeft') {
+        direction = 'left';
+      } else if (event.key === 'ArrowRight') {
+        direction = 'right';
+      } else if (event.key === 'ArrowUp') {
+        direction = 'up';
+      } else if (event.key === 'ArrowDown') {
+        direction = 'down';
+      }
+      game(direction);
+      square = gen_num(square);
+      for (let i = 1; i < 17; i++) {
+        const id = document.getElementById("id" + i);
+        if (square[i] != 0){
+        id.innerHTML = square[i];} else {id.innerHTML = ' '}
+      }
+    }
+  }
+}
+
+setInterval(() => {
+  document.addEventListener('keydown', handleKeyPress);
+}, 300);
+
+
+</script>
 </body>
 </html>
