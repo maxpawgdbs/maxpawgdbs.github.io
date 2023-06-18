@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <title>2048</title>
     <style>
+body{
+    background-image: linear-gradient(to bottom right, #ee82ee, #ff0000);
+    height: 100vh;
+    padding-top: 1%
+    }
 .grid-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 10px;
-  width: 240px; /* (4 * 50) + (3 * 10) = 240 */
-  height: 240px; /* (4 * 50) + (3 * 10) = 240 */
-  margin: 100px;
+  grid-gap: 10%;
+  width: 50%;
+  height: 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+  margin-top: 5%;
 }
 
 .grid-item {
@@ -24,10 +31,12 @@
 .grid-buttons {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
-  width: 190px;
-  height: 120px;
-  margin: 100px;
+  grid-gap: 5%;
+  width: 20%;
+  height: 20%;
+  margin-left: 40%;
+  margin-right: 40%;
+  margin-top: 5%
 }
 
 .grid-button {
@@ -52,11 +61,21 @@
     text-align: center;
     font-size: 24px;
     margin-left: 100px;}
+.gdiv{
+    background-color: white;
+    height: 80%;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.80);
+    border-radius: 30px;
+    }
+
     </style>
 </head>
 <body>
-<h1 id="indicator">Игра 2048</h1>
-<button id="reset" class="reset">Заново</button>
+<div class="gdiv">
+<h1 id="indicator" style="width: 20%; margin-left: 40%; margin-right: 40%;">Игра 2048</h1>
     <div class="grid-container">
   <div id="id1" class="grid-item"></div>
   <div id="id2" class="grid-item"></div>
@@ -80,8 +99,11 @@
     <button id="up" class="grid-button">&#8593;</button>
     <button class="grid-button button-transparent"></button>
     <button id="left" class="grid-button">&#8592;</button>
-    <button id="down" class="grid-button">&#8595;</button>
+    <button id="reset" class="grid-button">&#10227;</button>
     <button id="right" class="grid-button">&#8594;</button>
+    <button class="grid-button button-transparent"></button>
+    <button id="down" class="grid-button">&#8595;</button>
+</div>
 </div>
 <script>
     function new_square() {
