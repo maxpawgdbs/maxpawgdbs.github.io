@@ -1,450 +1,238 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>2048</title>
-    <style>
-body{
-    background-image: linear-gradient(to bottom right, #ee82ee, #ff0000);
-    height: 100vh;
-    padding-top: 1%
-    }
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 10%;
-  width: 50%;
-  height: 50%;
-  margin-left: 25%;
-  margin-right: 25%;
-  margin-top: 5%;
-}
-
-.grid-item {
-  background-color: #ddd;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  font-size: 24px;
-  padding: 10px;
-}
-.grid-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 5%;
-  width: 20%;
-  height: 20%;
-  margin-left: 40%;
-  margin-right: 40%;
-  margin-top: 5%
-}
-
-.grid-button {
-  background-color: #ddd;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  font-size: 24px;
-  padding: 10px;
-}
-.button-transparent {
-  background-color: transparent;
-  border: none;
-  color: #007bff;
-  opacity: 0.5;
-  transition: opacity 0.2s ease-in-out;
-}
-.reset{
-    background-color: #ddd;
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    font-size: 24px;
-    margin-left: 100px;}
-.gdiv{
-    background-color: white;
-    height: 80%;
-    width: 50%;
-    margin-left: 25%;
-    margin-right: 25%;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.80);
-    border-radius: 30px;
-    }
-
-    </style>
+    <title>Title</title>
 </head>
 <body>
-<div class="gdiv">
-<h1 id="indicator" style="width: 20%; margin-left: 40%; margin-right: 40%;">Игра 2048</h1>
-    <div class="grid-container">
-  <div id="id1" class="grid-item"></div>
-  <div id="id2" class="grid-item"></div>
-  <div id="id3" class="grid-item"></div>
-  <div id="id4" class="grid-item"></div>
-  <div id="id5" class="grid-item"></div>
-  <div id="id6" class="grid-item"></div>
-  <div id="id7" class="grid-item"></div>
-  <div id="id8" class="grid-item"></div>
-  <div id="id9" class="grid-item"></div>
-  <div id="id10" class="grid-item"></div>
-  <div id="id11" class="grid-item"></div>
-  <div id="id12" class="grid-item"></div>
-  <div id="id13" class="grid-item"></div>
-  <div id="id14" class="grid-item"></div>
-  <div id="id15" class="grid-item"></div>
-  <div id="id16" class="grid-item"></div>
+<div style="display: flex;">
+    <p style="font-size: 50px; margin: 50px;">Баланс: <b id="balance">0</b></p>
+    <p style="font-size: 50px; margin: 50px;">Пассивный доход: <b id="PassiveMoney">0</b>/c</p>
 </div>
-<div class="grid-buttons">
-    <button class="grid-button button-transparent"></button>
-    <button id="up" class="grid-button">&#8593;</button>
-    <button class="grid-button button-transparent"></button>
-    <button id="left" class="grid-button">&#8592;</button>
-    <button id="reset" class="grid-button">&#10227;</button>
-    <button id="right" class="grid-button">&#8594;</button>
-    <button class="grid-button button-transparent"></button>
-    <button id="down" class="grid-button">&#8595;</button>
-</div>
-</div>
+<button id="click" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;">Клик +<b id="MfC">1</b></button>
+<button id="buttonupdateclick" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;"><p>Уровень: <b
+        id="LevelUC">1</b></p>
+    <p>Улучшить на <b id="textupdateclick">0.10</b></p>
+    <p>Цена: <b id="TextCUC">20</b></p></button>
+<button id="BUP" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;"><p>Уровень: <b id="LUP">0</b></p>
+    <p>Улучшить на <b id="TUP">10</b></p>
+    <p>Цена: <b id="TextCUP">500</b></p></button>
 <script>
-    function new_square() {
-  let square = {};
-  for (let i = 1; i <= 16; i++) {
-    square[i] = 0;
-  }
-  return square;
-}
+<!--    if (document.cookie.indexOf('maxpawclicker=') !== -1) {-->
+<!--        // Получаем значение cookie-->
+<!--        var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)maxpawclicker\s*\=\s*([^;]*).*$)|^.*$/, "$1");-->
 
-function gen_num(square) {
-  let n = Math.floor(Math.random() * 16) + 1;
-  while (square[n] !== 0) {
-    n = Math.floor(Math.random() * 16) + 1;
-  }
-  square[n] = Math.random() < 0.9 ? 2 : 4;
-  return square;
-}
-function game(button, square) {
-  if (button == 'up') {
-    for (let i = 5; i <= 8; i++) {
-      if (square[i] != 0) {
-        if (square[i - 4] == 0) {
-          square[i - 4] = square[i];
-          square[i] = 0;
-        } else if (square[i - 4] === square[i]) {
-          square[i - 4] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-    for (let i = 9; i <= 12; i++) {
-      if (square[i] != 0) {
-        if (square[i - 4] == 0) {
-          square[i - 4] = square[i];
-          square[i] = 0;
-          if (square[i - 8] == 0) {
-            square[i - 8] = square[i - 4];
-            square[i - 4] = 0;
-          } else if (square[i - 8] === square[i - 4]) {
-            square[i - 8] = (square[i - 4] * 2).toString();
-            square[i - 4] = 0;
-          }
-        } else if (square[i - 4] === square[i]) {
-          square[i - 4] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-    for (let i = 13; i <= 16; i++) {
-      if (square[i] != 0) {
-        if (square[i - 4] == 0) {
-          square[i - 4] = square[i];
-          square[i] = 0;
-          if (square[i - 8] == 0) {
-            square[i - 8] = square[i - 4];
-            square[i - 4] = 0;
-            if (square[i - 12] == 0) {
-              square[i - 12] = square[i - 8];
-              square[i - 8] = 0;
-            } else if (square[i - 12] === square[i - 8]) {
-              square[i - 12] = (square[i - 8] * 2).toString();
-              square[i - 8] = 0;
-            }
-          } else if (square[i - 8] === square[i - 4]) {
-            square[i - 8] = (square[i - 4] * 2).toString();
-            square[i - 4] = 0;
-          }
-        } else if (square[i - 4] === square[i]) {
-          square[i - 4] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-  } if (button == 'left') {
-    for (let i = 2; i <= 14; i += 4) {
-      if (square[i] != 0) {
-        if (square[i - 1] == 0) {
-          square[i - 1] = square[i];
-          square[i] = 0;
-        } else if (square[i - 1] === square[i]) {
-          square[i - 1] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-    for (let i = 3; i <= 15; i += 4) {
-      if (square[i] != 0) {
-        if (square[i - 1] == 0) {
-          square[i - 1] = square[i];
-          square[i] = 0;
-          if (square[i - 2] == 0) {
-            square[i - 2] = square[i - 1];
-            square[i - 1] = 0;
-          } else if (square[i - 2] === square[i - 1]) {
-            square[i - 2] = (square[i - 1] * 2).toString();
-            square[i - 1] = 0;
-          }
-        } else if (square[i - 1] === square[i]) {
-          square[i - 1] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-    for (let i = 4; i <= 16; i += 4) {
-      if (square[i] != 0) {
-        if (square[i - 1] == 0) {
-          square[i - 1] = square[i];
-          square[i] = 0;
-          if (square[i - 2] == 0) {
-            square[i - 2] = square[i - 1];
-            square[i - 1] = 0;
-            if (square[i - 3] == 0) {
-              square[i - 3] = square[i - 2];
-              square[i - 2] = 0;
-            } else if (square[i - 3] === square[i - 2]) {
-              square[i - 3] = (square[i - 2] * 2).toString();
-              square[i - 2] = 0;
-            }
-          } else if (square[i - 2] === square[i - 1]) {
-            square[i - 2] = (square[i - 1] * 2).toString();
-            square[i - 1] = 0;
-          }
-        } else if (square[i - 1] === square[i]) {
-          square[i - 1] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-  } if (button == 'down') {
-    for (let i = 9; i <= 12; i++) {
-      if (square[i] != 0) {
-        if (square[i + 4] == 0) {
-          square[i + 4] = square[i];
-          square[i] = 0;
-        } else if (square[i + 4] === square[i]) {
-          square[i + 4] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-    for (let i = 5; i <= 8; i++) {
-      if (square[i] != 0) {
-        if (square[i + 4] == 0) {
-          square[i + 4] = square[i];
-          square[i] = 0;
-          if (square[i + 8] == 0) {
-            square[i + 8] = square[i + 4];
-            square[i + 4] = 0;
-          } else if (square[i + 8] === square[i + 4]) {
-            square[i + 8] = (square[i + 4] * 2).toString();
-            square[i + 4] = 0;
-          }
-        } else if (square[i + 4] === square[i]) {
-          square[i + 4] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-    for (let i = 1; i <= 4; i++) {
-      if (square[i] != 0) {
-        if (square[i + 4] == 0) {
-          square[i + 4] = square[i];
-          square[i] = 0;
-          if (square[i + 8] == 0) {
-            square[i + 8] = square[i + 4];
-            square[i + 4] = 0;
-            if (square[i + 12] == 0) {
-              square[i + 12] = square[i + 8];
-              square[i + 8] = 0;
-            } else if (square[i + 12] === square[i + 8]) {
-              square[i + 12] = (square[i + 8] * 2).toString();
-              square[i + 8] = 0;
-            }
-          } else if (square[i + 8] === square[i + 4]) {
-            square[i + 8] = (square[i + 4] * 2).toString();
-            square[i + 4] = 0;
-          }
-        } else if (square[i + 4] === square[i]) {
-          square[i + 4] = (square[i] * 2).toString();
-          square[i] = 0;
-        }
-      }
-    }
-  } else if (button == 'right') {
-  for (let i = 3; i <= 15; i += 4) {
-    if (square[i] != 0) {
-      if (square[i + 1] == 0) {
-        square[i + 1] = square[i];
-        square[i] = 0;
-      } else if (square[i + 1] === square[i]) {
-        square[i + 1] = (square[i] * 2).toString();
-        square[i] = 0;
-      }
-    }
-  }
-  for (let i = 2; i <= 14; i += 4) {
-    if (square[i] != 0) {
-      if (square[i + 1] == 0) {
-        square[i + 1] = square[i];
-        square[i] = 0;
-        if (square[i + 2] == 0) {
-          square[i + 2] = square[i + 1];
-          square[i + 1] = 0;
-        } else if (square[i + 2] === square[i + 1]) {
-          square[i + 2] = (square[i + 1] * 2).toString();
-          square[i + 1] = 0;
-        }
-      } else if (square[i + 1] === square[i]) {
-        square[i + 1] = (square[i] * 2).toString();
-        square[i] = 0;
-      }
-    }
-  }
-  for (let i = 1; i <= 13; i += 4) {
-    if (square[i] != 0) {
-      if (square[i + 1] == 0) {
-        square[i + 1] = square[i];
-        square[i] = 0;
-        if (square[i + 2] == 0) {
-          square[i + 2] = square[i + 1];
-          square[i + 1] = 0;
-          if (square[i + 3] == 0) {
-            square[i + 3] = square[i + 2];
-            square[i + 2] = 0;
-          } else if (square[i + 3] === square[i + 2]) {
-            square[i + 3] = (square[i + 2] * 2).toString();
-            square[i + 2] = 0;
-          }
-        } else if (square[i + 2] === square[i + 1]) {
-          square[i + 2] = (square[i + 1] * 2).toString();
-          square[i + 1] = 0;
-        }
-      } else if (square[i + 1] === square[i]) {
-        square[i + 1] = (square[i] * 2).toString();
-        square[i] = 0;
-      }
-    }
-  }
-}
-for (let i = 1; i < 17; i++){
-    visual_square[i] = parseInt(visual_square[i]);
-    }
-return square;
-}
+<!--        // Раскодируем JSON-строку из URL-безопасной строки-->
+<!--        var decodedJson = decodeURIComponent(cookieValue);-->
 
-function comparison_dicts(dict1, dict2){
-    var list1 = [];
-    var list2 = [];
-    for (i = 1; i < 17; i++){
-        list1.push(dict1[i]);
-        list2.push(dict2[i]);}
-    if (JSON.stringify(list1) === JSON.stringify(list2)) {
-      return true;
+<!--        // Десериализуем JSON-строку в объект-->
+<!--        var maxpawclicker = JSON.parse(decodedJson);-->
+
+<!--        // Используем переменные-->
+<!--            maxpawclicker.Cookie_click_money = click_money;-->
+<!--            maxpawclicker.Cookie_money = money;-->
+<!--            maxpawclicker.Cookie_CenaUC = CenaUC;-->
+<!--            maxpawclicker.Cookie_LevelUC = LevelUC;-->
+<!--            maxpawclicker.Cookie_LevelUP = LevelUP;-->
+<!--            maxpawclicker.Cookie_TextUP = TextUP;-->
+<!--            maxpawclicker.Cookie_CenaUP = CenaUP;-->
+<!--            vCookie_PM: PM;}-->
+<!--    else {-->
+<!--        var click_money = 1.0;-->
+<!--        var money = 0.0;-->
+<!--        var CenaUC = 20.0;-->
+<!--        var LevelUC = 1.0;-->
+
+<!--        var LevelUP = 0.0;-->
+<!--        var TextUP = 10.0;-->
+<!--        var CenaUP = 500.0;-->
+<!--        var PM = 0.0;}-->
+
+        var click_money, money, CenaUC, LevelUC, LevelUP, TextUP, CenaUP, PM;
+    if (document.cookie.indexOf('maxpawclicker=') !== -1) {
+        var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)maxpawclicker\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        var decodedJson = decodeURIComponent(cookieValue);
+        var maxpawclicker = JSON.parse(decodedJson);
+
+        click_money = maxpawclicker.Cookie_click_money;
+        money = maxpawclicker.Cookie_money;
+        CenaUC = maxpawclicker.Cookie_CenaUC;
+        LevelUC = maxpawclicker.Cookie_LevelUC;
+        LevelUP = maxpawclicker.Cookie_LevelUP;
+        TextUP = maxpawclicker.Cookie_TextUP;
+        CenaUP = maxpawclicker.Cookie_CenaUP;
+        PM = maxpawclicker.Cookie_PM;
     } else {
-      return false;
-    }}
+        click_money = 1.0;
+        money = 0.0;
+        CenaUC = 20.0;
+        LevelUC = 1.0;
+
+        LevelUP = 0.0;
+        TextUP = 10.0;
+        CenaUP = 500.0;
+        PM = 0.0;
+    }
 
 
-function win(move, square){
-let move_square = Object.assign({}, square);
-square = game(move, square);
-let count = 0;
-for (i = 1; i < 17; i++){
-if (square[i] != 0){count++;}}
-if (count != 16){
-if (!comparison_dicts(move_square, square)){
-square = gen_num(square);}}
-count = 0;
-for (i = 1; i < 17; i++){
-if (square[i] != 0){count++;}}
-if (count == 16){
-move_square = Object.assign({}, square);
-move_square = game("up", move_square);
-move_square = game("left", move_square);
-move_square = game("right", move_square);
-move_square = game("down", move_square);
-if (comparison_dicts(move_square, square)){
-const indicator =  document.getElementById('indicator');
-        indicator.innerHTML = 'Проигрыш';}}
-return square;}
+        const Balance = document.getElementById("balance");
+        const TUC = document.getElementById("textupdateclick");
+        const TextCUC = document.getElementById("TextCUC");
+        const MfC = document.getElementById("MfC");
+        const LUC = document.getElementById("LevelUC");
 
-function update_square(square){
-    for (let i = 1; i < 17; i++) {
-        const id = document.getElementById("id" + i);
-        if (square[i] != 0){
-        id.innerHTML = square[i];} else {id.innerHTML = ' '}
-        } return square;}
+        const LUP = document.getElementById("LUP");
+        const TUP = document.getElementById("TUP");
+        const TextCUP = document.getElementById("TextCUP");
+        const PassiveMoney = document.getElementById("PassiveMoney");
 
-function begin_game(){
-    square = new_square();
-    square = gen_num(square);
-    square = gen_num(square);
-    square = update_square(square);
-    return square;}
+        LUP.innerHTML = LevelUP;
+        TextCUP.innerHTML = CenaUP;
+        TUP.innerHTML = TextUP;
+        PassiveMoney.innerHTML = PM;
+        Balance.innerHTML = money;
+        TUC.innerHTML = (click_money * 0.1).toFixed(2);
+        TextCUC.innerHTML = CenaUC;
+        MfC.innerHTML = click_money;
+        LUC.innerHTML = LevelUC;
 
-let visual_square = begin_game();
+        var Click = document.getElementById("click");
+        Click.addEventListener("click", function(){
+            money = parseFloat((money + click_money).toFixed(2));
 
-var leftButton = document.getElementById("left");
-  leftButton.addEventListener("click", function() {
-    handleButtonClick('left');
-  });
+            Balance.innerHTML = money;
 
-  var rightButton = document.getElementById("right");
-  rightButton.addEventListener("click", function() {
-    handleButtonClick('right');
-  });
+            // Создаем объект с несколькими переменными
+            var maxpawclicker = {
+              Cookie_click_money: click_money,
+              Cookie_money: money,
+              Cookie_CenaUC: CenaUC,
+              Cookie_LevelUC: LevelUC,
+              Cookie_LevelUP: LevelUP,
+              Cookie_TextUP: TextUP,
+              Cookie_CenaUP: CenaUP,
+              Cookie_PM: PM
+            };
 
-  var upButton = document.getElementById("up");
-  upButton.addEventListener("click", function() {
-    handleButtonClick('up');
-  });
+            // Сериализуем объект в формат JSON
+            var json = JSON.stringify(maxpawclicker);
 
-  var downButton = document.getElementById("down");
-  downButton.addEventListener("click", function() {
-    handleButtonClick('down');
-  });
+            // Кодируем JSON-строку в URL-безопасную строку
+            var encodedJson = encodeURIComponent(json);
 
-  var resetButton = document.getElementById("reset");
-  resetButton.addEventListener("click", function() {
-    visual_square = begin_game();
-    const indicator =  document.getElementById('indicator');
-    indicator.innerHTML = 'Игра 2048';
-  });
+            // Сохраняем закодированную строку в cookie
+            document.cookie = 'maxpawclicker=' + encodedJson;
+            });
+
+        var BUC = document.getElementById("buttonupdateclick");
+        BUC.addEventListener("click", function(){
+            if (money >= CenaUC){
+                LevelUC++;
+                money = parseFloat((money - CenaUC).toFixed(2));
+                CenaUC = parseFloat((CenaUC * 1.2).toFixed(2));
+                click_money = parseFloat((click_money * 1.1).toFixed(2));
+
+                TUC.innerHTML = (click_money * 0.1).toFixed(2);
+                TextCUC.innerHTML = CenaUC;
+                Balance.innerHTML = money;
+                MfC.innerHTML = click_money;
+                LUC.innerHTML = LevelUC;}
+            else {alert("Недостаточно валюты")};
+            // Создаем объект с несколькими переменными
+            var maxpawclicker = {
+              Cookie_click_money: click_money,
+              Cookie_money: money,
+              Cookie_CenaUC: CenaUC,
+              Cookie_LevelUC: LevelUC,
+              Cookie_LevelUP: LevelUP,
+              Cookie_TextUP: TextUP,
+              Cookie_CenaUP: CenaUP,
+              Cookie_PM: PM
+            };
+
+            // Сериализуем объект в формат JSON
+            var json = JSON.stringify(maxpawclicker);
+
+            // Кодируем JSON-строку в URL-безопасную строку
+            var encodedJson = encodeURIComponent(json);
+
+            // Сохраняем закодированную строку в cookie
+            document.cookie = 'maxpawclicker=' + encodedJson;
+            });
+
+        var BUP = document.getElementById("BUP");
+        BUP.addEventListener("click", function(){
+            if (money >= CenaUP){
+                if (LUP == 0){
+                    LevelUP++;
+                    money = money - CenaUP;
+                    TextUP = 4;
+                    CenaUP = parseFloat((CenaUP * 1.2).toFixed(2));
+                    PM = 10;
 
 
-  function handleButtonClick(direction) {
-    let count = 0;
-    for (i = 1; i < 17; i++){
-        if (visual_square[i] != 0){count++;}}
-    if (count != 16){
-        visual_square = win(direction, visual_square);
-        visual_square = update_square(visual_square);}
-      else{move_square = Object.assign({}, square);
-        move_square = game("up", move_square);
-        move_square = game("left", move_square);
-        move_square = game("right", move_square);
-        move_square = game("down", move_square);
-        if (!comparison_dicts(move_square, square)){
-        visual_square = win(direction, visual_square);
-        visual_square = update_square(visual_square);}}}
+                    LUP.innerHTML = LevelUP;
+                    TextCUP.innerHTML = CenaUP;
+                    TUP.innerHTML = TextUP;
+                    PassiveMoney.innerHTML = PM;
+                    Balance.innerHTML = money;}
+                else {
+                    LevelUP++;
+                    money = money - CenaUP;
+                    PM = parseFloat((PM + TextUP).toFixed(2));
+                    TextUP = parseFloat((TextUP * 1.1).toFixed(2));
+                    CenaUP = parseFloat((CenaUP * 1.2).toFixed(2));
+
+                    LUP.innerHTML = LevelUP;
+                    TextCUP.innerHTML = CenaUP;
+                    TUP.innerHTML = TextUP;
+                    PassiveMoney.innerHTML = PM;
+                    Balance.innerHTML = money;}}
+            else {alert("Недостаточно валюты")}
+            // Создаем объект с несколькими переменными
+            var maxpawclicker = {
+              Cookie_click_money: click_money,
+              Cookie_money: money,
+              Cookie_CenaUC: CenaUC,
+              Cookie_LevelUC: LevelUC,
+              Cookie_LevelUP: LevelUP,
+              Cookie_TextUP: TextUP,
+              Cookie_CenaUP: CenaUP,
+              Cookie_PM: PM
+            };
+
+            // Сериализуем объект в формат JSON
+            var json = JSON.stringify(maxpawclicker);
+
+            // Кодируем JSON-строку в URL-безопасную строку
+            var encodedJson = encodeURIComponent(json);
+
+            // Сохраняем закодированную строку в cookie
+            document.cookie = 'maxpawclicker=' + encodedJson;
+            });
+
+
+        setInterval(function(){money = parseFloat((money + PM).toFixed(2)); Balance.innerHTML = money; // Создаем объект с несколькими переменными
+            var maxpawclicker = {
+              Cookie_click_money: click_money,
+              Cookie_money: money,
+              Cookie_CenaUC: CenaUC,
+              Cookie_LevelUC: LevelUC,
+              Cookie_LevelUP: LevelUP,
+              Cookie_TextUP: TextUP,
+              Cookie_CenaUP: CenaUP,
+              Cookie_PM: PM
+            };
+
+            // Сериализуем объект в формат JSON
+            var json = JSON.stringify(maxpawclicker);
+
+            // Кодируем JSON-строку в URL-безопасную строку
+            var encodedJson = encodeURIComponent(json);
+
+            // Сохраняем закодированную строку в cookie
+            document.cookie = 'maxpawclicker=' + encodedJson;}, 1000);
+
 
 
 </script>
