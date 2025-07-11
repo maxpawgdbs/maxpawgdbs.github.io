@@ -1,1 +1,240 @@
-COLD_OK
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="display: flex;">
+    <p style="font-size: 50px; margin: 50px;">Баланс: <b id="balance">0</b></p>
+    <p style="font-size: 50px; margin: 50px;">Пассивный доход: <b id="PassiveMoney">0</b>/c</p>
+</div>
+<button id="click" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;">Клик +<b id="MfC">1</b></button>
+<button id="buttonupdateclick" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;"><p>Уровень: <b
+        id="LevelUC">1</b></p>
+    <p>Улучшить на <b id="textupdateclick">0.10</b></p>
+    <p>Цена: <b id="TextCUC">20</b></p></button>
+<button id="BUP" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;"><p>Уровень: <b id="LUP">0</b></p>
+    <p>Улучшить на <b id="TUP">10</b></p>
+    <p>Цена: <b id="TextCUP">500</b></p></button>
+<script>
+<!--    if (document.cookie.indexOf('maxpawclicker=') !== -1) {-->
+<!--        // Получаем значение cookie-->
+<!--        var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)maxpawclicker\s*\=\s*([^;]*).*$)|^.*$/, "$1");-->
+
+<!--        // Раскодируем JSON-строку из URL-безопасной строки-->
+<!--        var decodedJson = decodeURIComponent(cookieValue);-->
+
+<!--        // Десериализуем JSON-строку в объект-->
+<!--        var maxpawclicker = JSON.parse(decodedJson);-->
+
+<!--        // Используем переменные-->
+<!--            maxpawclicker.Cookie_click_money = click_money;-->
+<!--            maxpawclicker.Cookie_money = money;-->
+<!--            maxpawclicker.Cookie_CenaUC = CenaUC;-->
+<!--            maxpawclicker.Cookie_LevelUC = LevelUC;-->
+<!--            maxpawclicker.Cookie_LevelUP = LevelUP;-->
+<!--            maxpawclicker.Cookie_TextUP = TextUP;-->
+<!--            maxpawclicker.Cookie_CenaUP = CenaUP;-->
+<!--            vCookie_PM: PM;}-->
+<!--    else {-->
+<!--        var click_money = 1.0;-->
+<!--        var money = 0.0;-->
+<!--        var CenaUC = 20.0;-->
+<!--        var LevelUC = 1.0;-->
+
+<!--        var LevelUP = 0.0;-->
+<!--        var TextUP = 10.0;-->
+<!--        var CenaUP = 500.0;-->
+<!--        var PM = 0.0;}-->
+
+        var click_money, money, CenaUC, LevelUC, LevelUP, TextUP, CenaUP, PM;
+    if (document.cookie.indexOf('maxpawclicker=') !== -1) {
+        var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)maxpawclicker\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        var decodedJson = decodeURIComponent(cookieValue);
+        var maxpawclicker = JSON.parse(decodedJson);
+
+        click_money = maxpawclicker.Cookie_click_money;
+        money = maxpawclicker.Cookie_money;
+        CenaUC = maxpawclicker.Cookie_CenaUC;
+        LevelUC = maxpawclicker.Cookie_LevelUC;
+        LevelUP = maxpawclicker.Cookie_LevelUP;
+        TextUP = maxpawclicker.Cookie_TextUP;
+        CenaUP = maxpawclicker.Cookie_CenaUP;
+        PM = maxpawclicker.Cookie_PM;
+    } else {
+        click_money = 1.0;
+        money = 0.0;
+        CenaUC = 20.0;
+        LevelUC = 1.0;
+
+        LevelUP = 0.0;
+        TextUP = 10.0;
+        CenaUP = 500.0;
+        PM = 0.0;
+    }
+
+
+        const Balance = document.getElementById("balance");
+        const TUC = document.getElementById("textupdateclick");
+        const TextCUC = document.getElementById("TextCUC");
+        const MfC = document.getElementById("MfC");
+        const LUC = document.getElementById("LevelUC");
+
+        const LUP = document.getElementById("LUP");
+        const TUP = document.getElementById("TUP");
+        const TextCUP = document.getElementById("TextCUP");
+        const PassiveMoney = document.getElementById("PassiveMoney");
+
+        LUP.innerHTML = LevelUP;
+        TextCUP.innerHTML = CenaUP;
+        TUP.innerHTML = TextUP;
+        PassiveMoney.innerHTML = PM;
+        Balance.innerHTML = money;
+        TUC.innerHTML = (click_money * 0.1).toFixed(2);
+        TextCUC.innerHTML = CenaUC;
+        MfC.innerHTML = click_money;
+        LUC.innerHTML = LevelUC;
+
+        var Click = document.getElementById("click");
+        Click.addEventListener("click", function(){
+            money = parseFloat((money + click_money).toFixed(2));
+
+            Balance.innerHTML = money;
+
+            // Создаем объект с несколькими переменными
+            var maxpawclicker = {
+              Cookie_click_money: click_money,
+              Cookie_money: money,
+              Cookie_CenaUC: CenaUC,
+              Cookie_LevelUC: LevelUC,
+              Cookie_LevelUP: LevelUP,
+              Cookie_TextUP: TextUP,
+              Cookie_CenaUP: CenaUP,
+              Cookie_PM: PM
+            };
+
+            // Сериализуем объект в формат JSON
+            var json = JSON.stringify(maxpawclicker);
+
+            // Кодируем JSON-строку в URL-безопасную строку
+            var encodedJson = encodeURIComponent(json);
+
+            // Сохраняем закодированную строку в cookie
+            document.cookie = 'maxpawclicker=' + encodedJson + "; max-age=300000000";
+            });
+
+        var BUC = document.getElementById("buttonupdateclick");
+        BUC.addEventListener("click", function(){
+            if (money >= CenaUC){
+                LevelUC++;
+                money = parseFloat((money - CenaUC).toFixed(2));
+                CenaUC = parseFloat((CenaUC * 1.2).toFixed(2));
+                click_money = parseFloat((click_money * 1.1).toFixed(2));
+
+                TUC.innerHTML = (click_money * 0.1).toFixed(2);
+                TextCUC.innerHTML = CenaUC;
+                Balance.innerHTML = money;
+                MfC.innerHTML = click_money;
+                LUC.innerHTML = LevelUC;}
+            else {alert("Недостаточно валюты")};
+            // Создаем объект с несколькими переменными
+            var maxpawclicker = {
+              Cookie_click_money: click_money,
+              Cookie_money: money,
+              Cookie_CenaUC: CenaUC,
+              Cookie_LevelUC: LevelUC,
+              Cookie_LevelUP: LevelUP,
+              Cookie_TextUP: TextUP,
+              Cookie_CenaUP: CenaUP,
+              Cookie_PM: PM
+            };
+
+            // Сериализуем объект в формат JSON
+            var json = JSON.stringify(maxpawclicker);
+
+            // Кодируем JSON-строку в URL-безопасную строку
+            var encodedJson = encodeURIComponent(json);
+
+            // Сохраняем закодированную строку в cookie
+            document.cookie = 'maxpawclicker=' + encodedJson + "; max-age=300000000";
+            });
+
+        var BUP = document.getElementById("BUP");
+        BUP.addEventListener("click", function(){
+            if (money >= CenaUP){
+                if (LUP == 0){
+                    LevelUP++;
+                    money = money - CenaUP;
+                    TextUP = 4;
+                    CenaUP = parseFloat((CenaUP * 1.2).toFixed(2));
+                    PM = 10;
+
+
+                    LUP.innerHTML = LevelUP;
+                    TextCUP.innerHTML = CenaUP;
+                    TUP.innerHTML = TextUP;
+                    PassiveMoney.innerHTML = PM;
+                    Balance.innerHTML = money;}
+                else {
+                    LevelUP++;
+                    money = money - CenaUP;
+                    PM = parseFloat((PM + TextUP).toFixed(2));
+                    TextUP = parseFloat((TextUP * 1.1).toFixed(2));
+                    CenaUP = parseFloat((CenaUP * 1.2).toFixed(2));
+
+                    LUP.innerHTML = LevelUP;
+                    TextCUP.innerHTML = CenaUP;
+                    TUP.innerHTML = TextUP;
+                    PassiveMoney.innerHTML = PM;
+                    Balance.innerHTML = money;}}
+            else {alert("Недостаточно валюты")}
+            // Создаем объект с несколькими переменными
+            var maxpawclicker = {
+              Cookie_click_money: click_money,
+              Cookie_money: money,
+              Cookie_CenaUC: CenaUC,
+              Cookie_LevelUC: LevelUC,
+              Cookie_LevelUP: LevelUP,
+              Cookie_TextUP: TextUP,
+              Cookie_CenaUP: CenaUP,
+              Cookie_PM: PM
+            };
+
+            // Сериализуем объект в формат JSON
+            var json = JSON.stringify(maxpawclicker);
+
+            // Кодируем JSON-строку в URL-безопасную строку
+            var encodedJson = encodeURIComponent(json);
+
+            // Сохраняем закодированную строку в cookie
+            document.cookie = 'maxpawclicker=' + encodedJson + "; max-age=300000000";
+            });
+
+
+        setInterval(function(){money = parseFloat((money + PM).toFixed(2)); Balance.innerHTML = money; // Создаем объект с несколькими переменными
+            var maxpawclicker = {
+              Cookie_click_money: click_money,
+              Cookie_money: money,
+              Cookie_CenaUC: CenaUC,
+              Cookie_LevelUC: LevelUC,
+              Cookie_LevelUP: LevelUP,
+              Cookie_TextUP: TextUP,
+              Cookie_CenaUP: CenaUP,
+              Cookie_PM: PM
+            };
+
+            // Сериализуем объект в формат JSON
+            var json = JSON.stringify(maxpawclicker);
+
+            // Кодируем JSON-строку в URL-безопасную строку
+            var encodedJson = encodeURIComponent(json);
+
+            // Сохраняем закодированную строку в cookie
+            document.cookie = 'maxpawclicker=' + encodedJson + "; max-age=300000000";}, 1000);
+
+
+
+</script>
+</body>
+</html>
