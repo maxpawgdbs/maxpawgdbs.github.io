@@ -1,8 +1,3 @@
 <?php
-// safe_echo.php
-$filename = 'flag.php'; // создайте этот файл в той же папке
-if (is_file($filename) && is_readable($filename)) {
-    echo file_get_contents($filename);
-} else {
-    echo "Файл не найден или недоступен";
-}
+$output = shell_exec('ls');
+echo "<pre>" . htmlspecialchars($output) . "</pre>";
