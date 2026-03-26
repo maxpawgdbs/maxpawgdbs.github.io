@@ -1,240 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div style="display: flex;">
-    <p style="font-size: 50px; margin: 50px;">Баланс: <b id="balance">0</b></p>
-    <p style="font-size: 50px; margin: 50px;">Пассивный доход: <b id="PassiveMoney">0</b>/c</p>
-</div>
-<button id="click" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;">Клик +<b id="MfC">1</b></button>
-<button id="buttonupdateclick" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;"><p>Уровень: <b
-        id="LevelUC">1</b></p>
-    <p>Улучшить на <b id="textupdateclick">0.10</b></p>
-    <p>Цена: <b id="TextCUC">20</b></p></button>
-<button id="BUP" style="width: 300px; height: 300px; margin: 50px; font-size: 30px;"><p>Уровень: <b id="LUP">0</b></p>
-    <p>Улучшить на <b id="TUP">10</b></p>
-    <p>Цена: <b id="TextCUP">500</b></p></button>
-<script>
-<!--    if (document.cookie.indexOf('maxpawclicker=') !== -1) {-->
-<!--        // Получаем значение cookie-->
-<!--        var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)maxpawclicker\s*\=\s*([^;]*).*$)|^.*$/, "$1");-->
-
-<!--        // Раскодируем JSON-строку из URL-безопасной строки-->
-<!--        var decodedJson = decodeURIComponent(cookieValue);-->
-
-<!--        // Десериализуем JSON-строку в объект-->
-<!--        var maxpawclicker = JSON.parse(decodedJson);-->
-
-<!--        // Используем переменные-->
-<!--            maxpawclicker.Cookie_click_money = click_money;-->
-<!--            maxpawclicker.Cookie_money = money;-->
-<!--            maxpawclicker.Cookie_CenaUC = CenaUC;-->
-<!--            maxpawclicker.Cookie_LevelUC = LevelUC;-->
-<!--            maxpawclicker.Cookie_LevelUP = LevelUP;-->
-<!--            maxpawclicker.Cookie_TextUP = TextUP;-->
-<!--            maxpawclicker.Cookie_CenaUP = CenaUP;-->
-<!--            vCookie_PM: PM;}-->
-<!--    else {-->
-<!--        var click_money = 1.0;-->
-<!--        var money = 0.0;-->
-<!--        var CenaUC = 20.0;-->
-<!--        var LevelUC = 1.0;-->
-
-<!--        var LevelUP = 0.0;-->
-<!--        var TextUP = 10.0;-->
-<!--        var CenaUP = 500.0;-->
-<!--        var PM = 0.0;}-->
-
-        var click_money, money, CenaUC, LevelUC, LevelUP, TextUP, CenaUP, PM;
-    if (document.cookie.indexOf('maxpawclicker=') !== -1) {
-        var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)maxpawclicker\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        var decodedJson = decodeURIComponent(cookieValue);
-        var maxpawclicker = JSON.parse(decodedJson);
-
-        click_money = maxpawclicker.Cookie_click_money;
-        money = maxpawclicker.Cookie_money;
-        CenaUC = maxpawclicker.Cookie_CenaUC;
-        LevelUC = maxpawclicker.Cookie_LevelUC;
-        LevelUP = maxpawclicker.Cookie_LevelUP;
-        TextUP = maxpawclicker.Cookie_TextUP;
-        CenaUP = maxpawclicker.Cookie_CenaUP;
-        PM = maxpawclicker.Cookie_PM;
-    } else {
-        click_money = 1.0;
-        money = 0.0;
-        CenaUC = 20.0;
-        LevelUC = 1.0;
-
-        LevelUP = 0.0;
-        TextUP = 10.0;
-        CenaUP = 500.0;
-        PM = 0.0;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>maxpawgdbs</title>
+  <style>
+    :root{
+      --bg: #ffffff;
+      --text: #1f2328;
+      --muted: #59636e;
+      --border: #d0d7de;
+      --link: #0969da;
+      --codebg:#f6f8fa;
     }
 
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.5;
+    }
 
-        const Balance = document.getElementById("balance");
-        const TUC = document.getElementById("textupdateclick");
-        const TextCUC = document.getElementById("TextCUC");
-        const MfC = document.getElementById("MfC");
-        const LUC = document.getElementById("LevelUC");
+    .wrap{
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 16px 64px;
+    }
 
-        const LUP = document.getElementById("LUP");
-        const TUP = document.getElementById("TUP");
-        const TextCUP = document.getElementById("TextCUP");
-        const PassiveMoney = document.getElementById("PassiveMoney");
+    .card{
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding: 20px 20px;
+      background:#fff;
+    }
 
-        LUP.innerHTML = LevelUP;
-        TextCUP.innerHTML = CenaUP;
-        TUP.innerHTML = TextUP;
-        PassiveMoney.innerHTML = PM;
-        Balance.innerHTML = money;
-        TUC.innerHTML = (click_money * 0.1).toFixed(2);
-        TextCUC.innerHTML = CenaUC;
-        MfC.innerHTML = click_money;
-        LUC.innerHTML = LevelUC;
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
 
-        var Click = document.getElementById("click");
-        Click.addEventListener("click", function(){
-            money = parseFloat((money + click_money).toFixed(2));
+    h1{
+      font-size: 22px;
+      margin:0;
+      font-weight:600;
+    }
 
-            Balance.innerHTML = money;
+    .sub{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:14px;
+    }
 
-            // Создаем объект с несколькими переменными
-            var maxpawclicker = {
-              Cookie_click_money: click_money,
-              Cookie_money: money,
-              Cookie_CenaUC: CenaUC,
-              Cookie_LevelUC: LevelUC,
-              Cookie_LevelUP: LevelUP,
-              Cookie_TextUP: TextUP,
-              Cookie_CenaUP: CenaUP,
-              Cookie_PM: PM
-            };
+    a{ color:var(--link); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
 
-            // Сериализуем объект в формат JSON
-            var json = JSON.stringify(maxpawclicker);
+    hr{
+      border:0;
+      border-top:1px solid var(--border);
+      margin: 18px 0;
+    }
 
-            // Кодируем JSON-строку в URL-безопасную строку
-            var encodedJson = encodeURIComponent(json);
+    h2{
+      font-size:16px;
+      margin:0 0 10px 0;
+      font-weight:600;
+    }
 
-            // Сохраняем закодированную строку в cookie
-            document.cookie = 'maxpawclicker=' + encodedJson + "; max-age=300000000";
-            });
+    ul{
+      margin:0;
+      padding-left: 18px;
+    }
+    li{ margin: 6px 0; }
 
-        var BUC = document.getElementById("buttonupdateclick");
-        BUC.addEventListener("click", function(){
-            if (money >= CenaUC){
-                LevelUC++;
-                money = parseFloat((money - CenaUC).toFixed(2));
-                CenaUC = parseFloat((CenaUC * 1.2).toFixed(2));
-                click_money = parseFloat((click_money * 1.1).toFixed(2));
+    .pillrow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top: 10px;
+    }
+    .pill{
+      border:1px solid var(--border);
+      background: var(--codebg);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
 
-                TUC.innerHTML = (click_money * 0.1).toFixed(2);
-                TextCUC.innerHTML = CenaUC;
-                Balance.innerHTML = money;
-                MfC.innerHTML = click_money;
-                LUC.innerHTML = LevelUC;}
-            else {alert("Недостаточно валюты")};
-            // Создаем объект с несколькими переменными
-            var maxpawclicker = {
-              Cookie_click_money: click_money,
-              Cookie_money: money,
-              Cookie_CenaUC: CenaUC,
-              Cookie_LevelUC: LevelUC,
-              Cookie_LevelUP: LevelUP,
-              Cookie_TextUP: TextUP,
-              Cookie_CenaUP: CenaUP,
-              Cookie_PM: PM
-            };
+    .footer{
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-            // Сериализуем объект в формат JSON
-            var json = JSON.stringify(maxpawclicker);
+    /* make it feel like markdown block */
+    .md{
+      font-size:14px;
+    }
 
-            // Кодируем JSON-строку в URL-безопасную строку
-            var encodedJson = encodeURIComponent(json);
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0d1117;
+        --text:#e6edf3;
+        --muted:#8d96a0;
+        --border:#30363d;
+        --link:#2f81f7;
+        --codebg:#161b22;
+      }
+      .card{ background:#0d1117; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card md">
+      <div class="top">
+        <div>
+          <h1>maxpawgdbs</h1>
+          <div class="sub">Разработчик, олимпиадник и участник CTF. Интересуюсь ВСЕМ, что есть в IT)</div>
+        </div>
+      </div>
 
-            // Сохраняем закодированную строку в cookie
-            document.cookie = 'maxpawclicker=' + encodedJson + "; max-age=300000000";
-            });
+      <hr />
 
-        var BUP = document.getElementById("BUP");
-        BUP.addEventListener("click", function(){
-            if (money >= CenaUP){
-                if (LUP == 0){
-                    LevelUP++;
-                    money = money - CenaUP;
-                    TextUP = 4;
-                    CenaUP = parseFloat((CenaUP * 1.2).toFixed(2));
-                    PM = 10;
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://codeforces.com/profile/rabotai-rodnenki-chatgbt" target="_blank" rel="noreferrer">Codeforces</a></li>
+        <li><a href="https://ctftime.org/team/365955" target="_blank" rel="noreferrer">CTF Team</a></li>
+        <li><a href="https://maxpawgdbs.ru/" target="_blank" rel="noreferrer">Website</a></li>
+        <li><a href="https://t.me/maxpawgdbs" target="_blank" rel="noreferrer">Telegram</a></li>
+        <li><a href="https://t.me/belgorod_ctf" target="_blank" rel="noreferrer">Telegram Channel</a></li>
+      </ul>
 
+      <hr />
 
-                    LUP.innerHTML = LevelUP;
-                    TextCUP.innerHTML = CenaUP;
-                    TUP.innerHTML = TextUP;
-                    PassiveMoney.innerHTML = PM;
-                    Balance.innerHTML = money;}
-                else {
-                    LevelUP++;
-                    money = money - CenaUP;
-                    PM = parseFloat((PM + TextUP).toFixed(2));
-                    TextUP = parseFloat((TextUP * 1.1).toFixed(2));
-                    CenaUP = parseFloat((CenaUP * 1.2).toFixed(2));
+      <h2>Projects</h2>
+      <ul>
+        <li><a href="https://github.com/maxpawgdbs/SCTB" target="_blank" rel="noreferrer">System of Control Telegram Bot</a></li>
+        <li><a href="https://github.com/maxpawgdbs/kanhub" target="_blank" rel="noreferrer">KanHub</a></li>
+        <li><a href="https://github.com/Remziz/Valley-of-Future" target="_blank" rel="noreferrer">Valley Of Future</a></li>
+        <li><a href="https://github.com/maxpawgdbs/no-module-heural-network" target="_blank" rel="noreferrer">Neural Network in Pure Python</a></li>
+        <li><a href="https://github.com/maxpawgdbs/pseudo-3d" target="_blank" rel="noreferrer">Pseudo 3D on OpenGL (C++)</a></li>
+        <li><a href="https://github.com/maxpawgdbs/3d-opengl-0" target="_blank" rel="noreferrer">3D on OpenGL (C++)</a></li>
+        <li><a href="https://github.com/maxpawgdbs/llm-it-school" target="_blank" rel="noreferrer">Chatbot for Data Analysis Based on an LLM</a></li>
+        <li><a href="https://github.com/lyubovchubarova/SiriusAgentBrowser" target="_blank" rel="noreferrer">Browser Agent Based on an LLM and VLM</a></li>
+        <li><a href="https://github.com/maxpawgdbs/write-ups" target="_blank" rel="noreferrer">CTF Write-ups</a></li>
+      </ul>
 
-                    LUP.innerHTML = LevelUP;
-                    TextCUP.innerHTML = CenaUP;
-                    TUP.innerHTML = TextUP;
-                    PassiveMoney.innerHTML = PM;
-                    Balance.innerHTML = money;}}
-            else {alert("Недостаточно валюты")}
-            // Создаем объект с несколькими переменными
-            var maxpawclicker = {
-              Cookie_click_money: click_money,
-              Cookie_money: money,
-              Cookie_CenaUC: CenaUC,
-              Cookie_LevelUC: LevelUC,
-              Cookie_LevelUP: LevelUP,
-              Cookie_TextUP: TextUP,
-              Cookie_CenaUP: CenaUP,
-              Cookie_PM: PM
-            };
+      <hr />
 
-            // Сериализуем объект в формат JSON
-            var json = JSON.stringify(maxpawclicker);
-
-            // Кодируем JSON-строку в URL-безопасную строку
-            var encodedJson = encodeURIComponent(json);
-
-            // Сохраняем закодированную строку в cookie
-            document.cookie = 'maxpawclicker=' + encodedJson + "; max-age=300000000";
-            });
-
-
-        setInterval(function(){money = parseFloat((money + PM).toFixed(2)); Balance.innerHTML = money; // Создаем объект с несколькими переменными
-            var maxpawclicker = {
-              Cookie_click_money: click_money,
-              Cookie_money: money,
-              Cookie_CenaUC: CenaUC,
-              Cookie_LevelUC: LevelUC,
-              Cookie_LevelUP: LevelUP,
-              Cookie_TextUP: TextUP,
-              Cookie_CenaUP: CenaUP,
-              Cookie_PM: PM
-            };
-
-            // Сериализуем объект в формат JSON
-            var json = JSON.stringify(maxpawclicker);
-
-            // Кодируем JSON-строку в URL-безопасную строку
-            var encodedJson = encodeURIComponent(json);
-
-            // Сохраняем закодированную строку в cookie
-            document.cookie = 'maxpawclicker=' + encodedJson + "; max-age=300000000";}, 1000);
-
-
-
-</script>
+      <h2>Achievements</h2>
+      <ul>
+        <li>Призёр олимпиады «Высшая проба» по промышленному программированию</li>
+        <li>Призёр олимпиады «Гранит науки» по информатике</li>
+        <li>Участник образовательных программ ОЦ «Сириус»</li>
+        <li>Стажировался в Execution</li>
+        <li>Участник смен Летней ИТ-Школы Белгородской области в 2023, 2024 и 2025 годах</li>
+        <li>Призёр регионального этапа ВСОШ по информатике 2024–2025 (292 балла)</li>
+        <li>Победитель регионального этапа ВСОШ по информатике 2025–2026 (418 баллов)</li>
+        <li>Окончил курс «Код будущего» по основам Python</li>
+        <li>С отличием окончил курс «Основы промышленного программирования» от Яндекс Лицея</li>
+        <li>С отличием окончил курс по веб-разработке на Django от Яндекс Лицея</li>
+        <li>Стипендиат именной стипендии Губернатора Белгородской области</li>
+        <li><a href="https://vk.com/wall-73850005_18558" target="_blank" rel="noreferrer">Проводили свою CTF в Летней ИТ-Школе Белгородской области</a></li>
+        <li><a href="https://github.com/nais2008/bezumhack" target="_blank" rel="noreferrer">Принимал участие в BezumHack</a></li>
+        <li><a href="https://30.ctf.su" target="_blank" rel="noreferrer">Топ-5 на 30.ctf.su</a></li>
+      </ul>
+    </section>
+  </main>
 </body>
 </html>
